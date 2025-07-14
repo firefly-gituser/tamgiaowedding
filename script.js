@@ -395,6 +395,10 @@ function updateWeddingDate(config) {
     if (partyTimeElement) {
         partyTimeElement.textContent = config.partyTime;
     }
+    const weddingLocationElement = document.querySelector('.wedding-location');
+    if (weddingLocationElement) {
+        weddingLocationElement.textContent = config.weddingLocation;
+    }
 
     const weddingWeekDayElement = document.querySelector('.wedding-week-day');
     if (weddingWeekDayElement) {
