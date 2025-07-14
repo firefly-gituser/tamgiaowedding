@@ -9,9 +9,9 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
 });
 
 // Countdown Timer
-function updateCountdown() {
+function updateCountdown(config) {
     // Set the wedding date (July 13, 2025)
-    const weddingDate = new Date('2025-07-13T07:00:00').getTime();
+    const weddingDate = new Date(config.weddingDate).getTime();
     const now = new Date().getTime();
     const distance = weddingDate - now;
 
@@ -41,18 +41,12 @@ function updateCountdown() {
     }
 }
 
-// Update countdown every second
-setInterval(updateCountdown, 1000);
-
-// Initial call to display countdown immediately
-updateCountdown();
-
 // Copy to clipboard functionality
 function copyToClipboard(text) {
-    navigator.clipboard.writeText(text).then(function() {
+    navigator.clipboard.writeText(text).then(function () {
         // Show a temporary notification
         showNotification('Bank number copied to clipboard!');
-    }, function(err) {
+    }, function (err) {
         console.error('Could not copy text: ', err);
         // Fallback for older browsers
         const textArea = document.createElement("textarea");
@@ -106,11 +100,11 @@ function showNotification(message) {
 }
 
 // Attendance button functionality
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     const attendanceBtns = document.querySelectorAll('.attendance-btn');
-    
+
     attendanceBtns.forEach(btn => {
-        btn.addEventListener('click', function() {
+        btn.addEventListener('click', function () {
             // Remove active class from all buttons
             attendanceBtns.forEach(b => b.classList.remove('active'));
             // Add active class to clicked button
@@ -121,13 +115,13 @@ document.addEventListener('DOMContentLoaded', function() {
     // Comment form submission
     const commentForm = document.querySelector('.comment-form');
     if (commentForm) {
-        commentForm.addEventListener('submit', function(e) {
+        commentForm.addEventListener('submit', function (e) {
             e.preventDefault();
-            
+
             const name = this.querySelector('input[type="text"]').value;
             const message = this.querySelector('textarea').value;
             const attendance = this.querySelector('.attendance-btn.active').textContent;
-            
+
             if (name && message) {
                 addComment(name, message, attendance);
                 this.reset();
@@ -142,7 +136,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Gallery image click functionality
     const galleryItems = document.querySelectorAll('.gallery-item img');
     galleryItems.forEach(img => {
-        img.addEventListener('click', function() {
+        img.addEventListener('click', function () {
             openImageModal(this.src);
         });
     });
@@ -176,17 +170,17 @@ document.addEventListener('DOMContentLoaded', function() {
 function addComment(name, message, attendance) {
     const commentsList = document.querySelector('.comments-list');
     const commentCount = document.querySelector('.comment-count');
-    
+
     if (commentsList && commentCount) {
         // Create new comment element
         const commentItem = document.createElement('div');
         commentItem.className = 'comment-item';
-        
+
         // Determine attendance status class
         let statusClass = 'attend';
         if (attendance.toLowerCase() === 'no') statusClass = 'not-attend';
         else if (attendance.toLowerCase() === 'maybe') statusClass = 'maybe';
-        
+
         commentItem.innerHTML = `
             <div class="comment-header-info">
                 <span class="commenter-name">${name}</span>
@@ -194,14 +188,14 @@ function addComment(name, message, attendance) {
             </div>
             <div class="comment-text">${message}</div>
         `;
-        
+
         // Add to comments list
         commentsList.appendChild(commentItem);
-        
+
         // Update comment count
         const currentCount = parseInt(commentCount.textContent);
         commentCount.textContent = String(currentCount + 1).padStart(2, '0');
-        
+
         // Animate new comment
         commentItem.style.opacity = '0';
         commentItem.style.transform = 'translateY(20px)';
@@ -230,7 +224,7 @@ function openImageModal(src) {
         z-index: 1000;
         cursor: pointer;
     `;
-    
+
     // Create image element
     const img = document.createElement('img');
     img.src = src;
@@ -241,15 +235,15 @@ function openImageModal(src) {
         border-radius: 10px;
         box-shadow: 0 10px 30px rgba(0,0,0,0.5);
     `;
-    
+
     modal.appendChild(img);
     document.body.appendChild(modal);
-    
+
     // Close modal on click
-    modal.addEventListener('click', function() {
+    modal.addEventListener('click', function () {
         document.body.removeChild(modal);
     });
-    
+
     // Close modal on escape key
     const handleEscape = (e) => {
         if (e.key === 'Escape') {
@@ -261,7 +255,7 @@ function openImageModal(src) {
 }
 
 // Map button functionality
-document.addEventListener('click', function(e) {
+document.addEventListener('click', function (e) {
     if (e.target.classList.contains('btn-map') || e.target.closest('.btn-map')) {
         e.preventDefault();
         // You can replace these coordinates with actual venue coordinates
@@ -271,10 +265,10 @@ document.addEventListener('click', function(e) {
 });
 
 // Parallax effect for hero section
-window.addEventListener('scroll', function() {
+window.addEventListener('scroll', function () {
     const scrolled = window.pageYOffset;
     const parallax = document.querySelector('.hero-bg');
-    
+
     if (parallax) {
         const speed = scrolled * 0.5;
         parallax.style.transform = `translateY(${speed}px)`;
@@ -282,7 +276,7 @@ window.addEventListener('scroll', function() {
 });
 
 // Navbar scroll effect (if you add a navbar later)
-window.addEventListener('scroll', function() {
+window.addEventListener('scroll', function () {
     const navbar = document.querySelector('.navbar');
     if (navbar) {
         if (window.scrollY > 100) {
@@ -294,13 +288,13 @@ window.addEventListener('scroll', function() {
 });
 
 // Loading animation
-window.addEventListener('load', function() {
+window.addEventListener('load', function () {
     const heroContent = document.querySelector('.hero-content');
     if (heroContent) {
         heroContent.style.opacity = '0';
         heroContent.style.transform = 'translateY(50px)';
         heroContent.style.transition = 'opacity 1s ease, transform 1s ease';
-        
+
         setTimeout(() => {
             heroContent.style.opacity = '1';
             heroContent.style.transform = 'translateY(0)';
@@ -354,7 +348,7 @@ function toggleAudio() {
 }
 
 // Initialize audio on first user interaction
-document.addEventListener('click', function() {
+document.addEventListener('click', function () {
     if (!audioPlayer) {
         initAudio();
     }
@@ -379,3 +373,54 @@ function shareInvitation() {
         showNotification('Wedding invitation link copied to clipboard!');
     }
 }
+
+function updateWeddingDate(config) {
+    const sortDayString = `${config.weddingDay}.${config.weddingMonth}.${config.weddingYear}`;
+    const longDateString = `Ngày ${config.weddingDay} tháng ${config.weddingMonth} năm ${config.weddingYear}`;
+    const moonDayString = `${config.weddingMoonDay}/${config.weddingMoonMonth} ${config.weddingMoonYear}`;
+
+    const longDateStringElements = document.getElementsByClassName('wedding-date-long-day');
+    const shortDateStringElements = document.getElementsByClassName('wedding-date-short-day');
+    const moonDateElements = document.getElementsByClassName('moon-date');
+
+    const traditionalTimeElement = document.querySelector('.traditional-time');
+    if (traditionalTimeElement) {
+        traditionalTimeElement.textContent = config.traditionalTime;
+    }
+    const customerTimeElement = document.querySelector('.customer-time');
+    if (customerTimeElement) {
+        customerTimeElement.textContent = config.customerTime;
+    }
+    const partyTimeElement = document.querySelector('.party-time');
+    if (partyTimeElement) {
+        partyTimeElement.textContent = config.partyTime;
+    }
+
+    const weddingWeekDayElement = document.querySelector('.wedding-week-day');
+    if (weddingWeekDayElement) {
+        weddingWeekDayElement.textContent = config.weddingWeekDay;
+    }
+    for (const element of longDateStringElements) {
+        element.textContent = longDateString;
+    }
+    for (const element of moonDateElements) {
+        element.textContent = moonDayString;
+    }
+    for (const element of shortDateStringElements) {
+        element.textContent = sortDayString;
+    }
+}
+
+async function run() {
+    const response = await fetch('config.json');
+    const config = await response.json();
+
+    // Update countdown every second
+    setInterval(() => updateCountdown(config), 1000);
+
+    updateWeddingDate(config);
+    // Initial call to display countdown immediately
+    updateCountdown(config);
+}
+
+run();
